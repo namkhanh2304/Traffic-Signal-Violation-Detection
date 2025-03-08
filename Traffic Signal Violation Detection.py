@@ -55,6 +55,22 @@ def draw_text_with_background(frame, text, position, font, scale, text_color, ba
 
 cap = cv2.VideoCapture("tr.mp4")
 
+import cv2
+
+# Open input video file
+video_path = "tr.mp4"  # Ensure the correct path
+cap = cv2.VideoCapture(video_path)
+
+# Get video properties
+frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+fps = int(cap.get(cv2.CAP_PROP_FPS))
+
+# Define VideoWriter to save the output
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Codec for .mp4
+out = cv2.VideoWriter("output.mp4", fourcc, fps, (frame_width, frame_height))
+
+
 while cap.isOpened():
     success, frame = cap.read()
     if not success:
@@ -102,10 +118,8 @@ while cap.isOpened():
                         # time.sleep(1)
                         
     
-        cv2.imshow("frame", frame)
-        if cv2.waitKey(1) == 27:
-            break
-        
-        
+        out.write(frame)  # Save the processed frame instead of displaying it
+    
 cap.release()
+out.release()
 cv2.destroyAllWindows()
